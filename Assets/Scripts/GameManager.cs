@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 using GGJ2025.UIComponents;
 using Karma;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace GGJ2025
         private List<PlayerInputHandler> players = new ();
         [field: SerializeField] public UIManager UIManager { get; private set; }
 
+        public event Action<PlayerInputHandler> OnPlayerJoinedEvent; 
         private BrawlManager brawlManager;
         private void Awake()
         {
@@ -32,8 +35,17 @@ namespace GGJ2025
         private void OnPlayerJoined(PlayerInput obj)
         {
             players.Add(obj.GetComponent<PlayerInputHandler>());
+            OnPlayerJoinedEvent?.Invoke(obj.GetComponent<PlayerInputHandler>());
         } 
-        
+        public void ResetPlayers()
+        {
+            // Destroy all players in a safe way (not in the middle of a loop)
+            players.ForEach(player => Destroy(player.gameObject, 0.1f));
+        }
+        public List<PlayerInputHandler> GetPlayers()
+        {
+            return players;
+        }
         public void EnableJoining()
         {
             playerInputManager.EnableJoining();
@@ -43,16 +55,10 @@ namespace GGJ2025
         {
             playerInputManager.DisableJoining();
         }
-        
-        public void BasicStartBrawl()
-        {
-            brawlManager = BrawlManager.StartBrawl(players, GameResources.BasicBrawlMap, GameResources.BasicBrawlMode);
-            DisableJoining();
-        }
 
-        public void StartBrawl(BrawlMap selectedMap, BrawlMode selectedMode)
+        public void StartBrawl(List<Brawler> playerSelections, BrawlMap selectedMap, BrawlMode selectedMode)
         {
-            brawlManager = BrawlManager.StartBrawl(players, selectedMap, selectedMode);
+            brawlManager = BrawlManager.StartBrawl(players, playerSelections, selectedMap, selectedMode);
             DisableJoining();
         }
     }

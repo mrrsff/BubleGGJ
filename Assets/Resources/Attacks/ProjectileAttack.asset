@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44359c5e5db447369e3e9f5283c81126, type: 3}
   m_Name: ProjectileAttack
   m_EditorClassIdentifier: 
-  Force: 50
+  Force: 1
   MinChargeTime: 1
   MaxChargeTime: 4
