@@ -22,14 +22,13 @@ namespace GGJ2025
         private bool isJumping;
         private bool isGrounded;
         private Rigidbody2D rb;
-        
+        public bool canJump;
         public event Action OnJumpEvent;
         public override void SetBrawler(Brawler brawler)
         {
             base.SetBrawler(brawler);
             rb = brawler.Rigidbody;
             rb.gravityScale = transform.lossyScale.y;
-            // groundDistance *= transform.lossyScale.y;
             MaxHorizontalSpeed *= transform.lossyScale.x;
             MaxVerticalSpeed *= transform.lossyScale.y;
             moveSpeed *= transform.lossyScale.x;
@@ -51,8 +50,7 @@ namespace GGJ2025
 
             CheckGrounded();
             if (isGrounded && moveInput.sqrMagnitude > 0) HandleMovement();
-            if (isJumping && jumpCooldown.IsReady) HandleJump();
-            // ApplyGravity();
+            if (canJump && isJumping && jumpCooldown.IsReady) HandleJump();
         }
         private void HandleMovement()
         {

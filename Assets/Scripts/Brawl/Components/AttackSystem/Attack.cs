@@ -15,7 +15,7 @@ namespace GGJ2025.AttackSystem
         private List<GameObject> _ignoredObjects;
         private float chargeStartTime;
 
-        protected float ChargeAmount; // Normalized value between 0 and 1
+        public float ChargeAmount; // Normalized value between 0 and 1
         public event Action OnChargeStart;
         public event Action OnChargeEnd;
         public virtual void StartCharge(Brawler brawler, List<GameObject> ignoredObjects)

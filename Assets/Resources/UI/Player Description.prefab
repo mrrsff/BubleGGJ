@@ -439,6 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e80dd05e0eb49998f17e21c138dc324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerName: {fileID: 5013537805718218223}
   BrawlerSelector: {fileID: 7613813123413307103}
   JoinedText: {fileID: 3195329658003506038}
   JoinText: {fileID: 3130851952892135806}
@@ -784,7 +785,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee3324c54ec42fa9d45a90ae8895bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedObject: {fileID: 0}
+  SelectRandomOnStart: 0
+  SelectedObject: {fileID: 4151878739169925810, guid: a005abf9f5f481945a38d83c6f1667be, type: 3}
   Dropdown: {fileID: 7662618772330114577}
 --- !u!1 &5126791498436444274
 GameObject:

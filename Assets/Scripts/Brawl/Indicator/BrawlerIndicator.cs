@@ -1,34 +1,51 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace GGJ2025.Indicator
 {
     public class BrawlerIndicator : MonoBehaviour
     {
+        private GameObject _playerName;
         private GameObject _indicator;
         private Quaternion _startRotation;
+        [SerializeField] private float yOffset = 0.1f;
         [SerializeField] private Vector2 padding = new(16, 16);
         [SerializeField] private float minScale = 0.25f;
         [SerializeField] private float maxScale = 1.5f;
 
         private float maxDistance = 50f;
+        public char playerid;
         
-        private void Start()
+        private void Awake()
         {
             _indicator = Instantiate(GameResources.IndicatorPrefab, GameManager.Instance.UIManager.Canvas.transform);
             _startRotation = _indicator.transform.rotation;
             _indicator.SetActive(false);
+            
+            _playerName = Instantiate(GameResources.PlayerNamePrefab, GameManager.Instance.UIManager.Canvas.transform);
+            _playerName.SetActive(false);
         }
+
+        private void Start()
+        {
+            _playerName.GetComponent<TextMeshProUGUI>().text = $"P{playerid}";
+        }
+
         private void Update()
         {
             var screenPos = GameManager.MainCamera.WorldToScreenPoint(transform.position);
             if (IsOnScreen(screenPos))
             {
                 _indicator.SetActive(false);
+                _playerName.SetActive(true);
+                _playerName.transform.position = new Vector3(screenPos.x, screenPos.y, 0);
+                _playerName.transform.position += Vector3.up * yOffset;
             }
             else
             {
                 _indicator.SetActive(true);
+                _playerName.SetActive(false);
                 var dir = (transform.position - GameManager.MainCamera.transform.position);
                 var distance = dir.magnitude;
                 dir.Normalize();

@@ -10,7 +10,6 @@ namespace GGJ2025
             {
                 Brawler.Rigidbody.AddForce(hitInfo.Direction * hitInfo.Force);
             }
-            else Debug.Log("Force is 0, no force applied");
         }
     }
 }

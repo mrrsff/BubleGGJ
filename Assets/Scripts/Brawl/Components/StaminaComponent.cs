@@ -10,13 +10,20 @@ namespace GGJ2025
     {
         [SerializeField] private float currentStamina;
         private float maxStamina = 100;
-        private float staminaRegenRate = 25;
+        private float staminaRegenRate = 25f;
         private Cooldown staminaRegenCooldown = new Cooldown(0.1f);
         private Cooldown staminaRegenDelay = new Cooldown(1f);
-
+        private float jumpStaminaCost = 5;
+        private MovementComponent movementComponent;
+        
+        public float MaxStamina => maxStamina;
+        public event Action<float> OnStaminaChanged; 
         public override void SetBrawler(Brawler brawler)
         {
             base.SetBrawler(brawler);
+            movementComponent = brawler.Get<MovementComponent>();
+            movementComponent.OnJumpEvent += () => UseStamina(jumpStaminaCost);
+            currentStamina = maxStamina;
         }
 
         private void Update()
@@ -25,6 +32,8 @@ namespace GGJ2025
             {
                 RegenStamina();
             }
+
+            movementComponent.canJump = CanUseStamina(jumpStaminaCost);
         }
         public bool CanUseStamina(float amount)
         {
@@ -35,13 +44,16 @@ namespace GGJ2025
             currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
             staminaRegenCooldown.Reset();
             staminaRegenDelay.Reset();
+            OnStaminaChanged?.Invoke(currentStamina);
         }
         
         private void RegenStamina()
         {
-            var newStamina = currentStamina + ((staminaRegenRate - 5 * DetermineStaminaState()) * Time.deltaTime);
+            var newStamina = currentStamina +
+                             (staminaRegenRate - 5 * DetermineStaminaState()) * staminaRegenCooldown.duration;
             currentStamina = Mathf.Clamp(newStamina, 0, maxStamina);
             staminaRegenCooldown.Reset();
+            OnStaminaChanged?.Invoke(currentStamina);
         }
         
         private int DetermineStaminaState()

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de0c43fbbc5463ea525aa2694c3b8a4, type: 3}
   m_Name: MeleeAttack
   m_EditorClassIdentifier: 
-  Force: 500
+  Force: 80
   MinChargeTime: 0
   MaxChargeTime: 3
-  AttackRadius: 3
+  ChargeAmount: 0
+  AttackRadius: 0.1

@@ -13,7 +13,9 @@ namespace GGJ2025
             typeof(AttackComponent),
             typeof(CollectorComponent),
             typeof(ForceReceiverComponent),
-            typeof(MovementComponent)
+            typeof(MovementComponent),
+            typeof(StaminaComponent),
+            typeof(RespawnComponent)
         };
 
         public override void OnBrawlStart(BrawlManager brawlManager)
@@ -28,7 +30,7 @@ namespace GGJ2025
 
         public override void OnBrawlEnd(BrawlManager brawlManager)
         {
-            
+            AudioManager.Instance.PlayWinMusic();
         }
         
         private void DeathListener(Brawler brawler)
