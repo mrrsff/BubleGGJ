@@ -6,12 +6,17 @@ namespace GGJ2025.Indicator
     public class BrawlerIndicator : MonoBehaviour
     {
         private GameObject _indicator;
-        private Vector3 startRotation;
+        private Quaternion _startRotation;
         [SerializeField] private Vector2 padding = new(16, 16);
+        [SerializeField] private float minScale = 0.25f;
+        [SerializeField] private float maxScale = 1.5f;
+
+        private float maxDistance = 50f;
+        
         private void Start()
         {
             _indicator = Instantiate(GameResources.IndicatorPrefab, GameManager.Instance.UIManager.Canvas.transform);
-            startRotation = _indicator.transform.rotation.eulerAngles;
+            _startRotation = _indicator.transform.rotation;
             _indicator.SetActive(false);
         }
         private void Update()
@@ -24,13 +29,20 @@ namespace GGJ2025.Indicator
             else
             {
                 _indicator.SetActive(true);
-                var dir = (transform.position - GameManager.MainCamera.transform.position).normalized;
+                var dir = (transform.position - GameManager.MainCamera.transform.position);
+                var distance = dir.magnitude;
+                dir.Normalize();
                 var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                _indicator.transform.rotation = Quaternion.Euler(0, 0, angle + startRotation.z);
+                _indicator.transform.rotation = _startRotation * Quaternion.Euler(0, 0, angle);
                 var canvasRect = GameManager.Instance.UIManager.Canvas.GetComponent<RectTransform>();
                 var x = Mathf.Clamp(screenPos.x, padding.x, canvasRect.sizeDelta.x - padding.x);
                 var y = Mathf.Clamp(screenPos.y, padding.y, canvasRect.sizeDelta.y - padding.y);
                 _indicator.transform.position = new Vector3(x, y, 0);
+                
+                var scale = _indicator.transform.localScale;
+                // as it gets closer to the camera, it should be bigger
+                scale.x = scale.y = Mathf.Lerp(minScale, maxScale, 1 - (distance / maxDistance));
+                _indicator.transform.localScale = scale;
             }
         }
         private static bool IsOnScreen(Vector3 screenPos)

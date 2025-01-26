@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Karma.Pooling;
 using UnityEngine;
 
@@ -10,12 +11,20 @@ namespace GGJ2025.AttackSystem
         protected override void ExecuteAttack(Brawler attacker, List<GameObject> ignoredObjects)
         {
             var projectile = ObjectPooler.DequeueObject<Projectile>(GameResources.GameSettings.ProjectilePoolKey);
-            projectile.transform.position = attacker.BalloonPoint.position;
+            projectile.transform.position = attacker.BalloonPoint.position + attacker.transform.right * attacker.transform.lossyScale.x * projectile.transform.lossyScale.x;    
             projectile.transform.rotation = Quaternion.identity;
             projectile.gameObject.SetActive(true);
             projectile.OnHit += (coll) => OnProjectileHit(projectile, attacker, coll);
             projectile.Rigidbody.linearVelocityX = attacker.transform.right.x * Force * (ChargeAmount + 1) *
                                                   attacker.transform.localScale.x;
+            
+            // Timer to deactivate the projectile
+            attacker.StartCoroutine(DeactivateProjectileAfterTime(projectile));
+        }
+        private IEnumerator DeactivateProjectileAfterTime(Projectile projectile)
+        {
+            yield return new WaitForSeconds(5);
+            ObjectPooler.EnqueueObject(projectile, GameResources.GameSettings.ProjectilePoolKey);
         }
         
         private void OnProjectileHit(Projectile projectile, Brawler attacker, Collision2D collision)
@@ -33,7 +42,7 @@ namespace GGJ2025.AttackSystem
             };
             hittable.OnHit(hitInfo);
             
-            Debug.Log("Projectile hit " + collision.gameObject.name);
+            Debug.Log("Projectile hit: " + collision.gameObject.name);
             ObjectPooler.EnqueueObject(projectile, GameResources.GameSettings.ProjectilePoolKey);
         }
     }

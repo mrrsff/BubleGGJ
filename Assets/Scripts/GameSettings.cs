@@ -9,5 +9,7 @@ namespace GGJ2025
         public LayerMask HittableLayer;
         public LayerMask PickupLayer;
         public string ProjectilePoolKey = "ProjectilePool";
+        public string BubblePoolKey = "BubblePool";
+        public float Gravity = 9.81f;
     }
 }

@@ -11,12 +11,12 @@ namespace GGJ2025
     public class MovementComponent : BaseBrawlerComponent, IEffectable<float>
     {
         [Header("Movement Settings")]
-        [SerializeField] private float moveSpeed = 3f;
-        [SerializeField] private float jumpForce = 5f;
+        [SerializeField] private float moveSpeed = 0.5f;
+        [SerializeField] private float jumpForce = 3f;
         [SerializeField] private Cooldown jumpCooldown = new (0.25f);
-        [SerializeField] private float MaxHorizontalSpeed = 8f;
-        [SerializeField] private float MaxVerticalSpeed = 8f;
-        [SerializeField] private float groundDistance = 0.25f;
+        [SerializeField] private float MaxHorizontalSpeed = 2f;
+        [SerializeField] private float MaxVerticalSpeed = 3f;
+        [SerializeField] private float groundDistance = 0.1f;
         [SerializeField] private float groundDrag = 5f;
         private Vector2 moveInput;
         private bool isJumping;
@@ -28,6 +28,12 @@ namespace GGJ2025
         {
             base.SetBrawler(brawler);
             rb = brawler.Rigidbody;
+            rb.gravityScale = transform.lossyScale.y;
+            // groundDistance *= transform.lossyScale.y;
+            MaxHorizontalSpeed *= transform.lossyScale.x;
+            MaxVerticalSpeed *= transform.lossyScale.y;
+            moveSpeed *= transform.lossyScale.x;
+            jumpForce *= transform.lossyScale.y;
             
             Brawler.InputHandler.OnJumpEvent += (value) => isJumping = value;
         }
@@ -38,14 +44,15 @@ namespace GGJ2025
             moveInput = Brawler.InputHandler.GetMoveInput();
             transform.localScale = moveInput.x switch
             {
-                < 0 => new Vector3(-1, 1, 1),
-                > 0 => new Vector3(1, 1, 1),
+                < 0 => transform.localScale.With(x: -Mathf.Abs(transform.localScale.x)),
+                > 0 => transform.localScale.With(x: Mathf.Abs(transform.localScale.x)),
                 _ => transform.localScale
             };
 
             CheckGrounded();
             if (isGrounded && moveInput.sqrMagnitude > 0) HandleMovement();
             if (isJumping && jumpCooldown.IsReady) HandleJump();
+            // ApplyGravity();
         }
         private void HandleMovement()
         {
@@ -61,7 +68,7 @@ namespace GGJ2025
         {
             var currentSpeed = rb.linearVelocity;
             var force = Vector2.up * jumpForce + (moveInput.With(y: 0) * jumpForce);
-            currentSpeed += force * GetMoveSpeedMultiplier();
+            currentSpeed = force * GetMoveSpeedMultiplier();
             
             var x = Mathf.Clamp(currentSpeed.x, -MaxHorizontalSpeed, MaxHorizontalSpeed);
             var y = Mathf.Clamp(currentSpeed.y, -MaxVerticalSpeed, MaxVerticalSpeed);
@@ -73,11 +80,22 @@ namespace GGJ2025
 
         private void CheckGrounded()
         {
-            isGrounded = Physics2D.Raycast(Brawler.GroundCheck.position, Vector2.down, groundDistance,
-                GameResources.GameSettings.GroundLayer);
+            var collider = Physics2D.OverlapCircle(Brawler.GroundCheck.position, groundDistance, GameResources.GameSettings.GroundLayer);
+            isGrounded = collider != null;
+            
             rb.linearDamping = isGrounded ? groundDrag : 0;
         }
-        
+
+        private void ApplyGravity()
+        {
+            if (isGrounded)
+            {
+                // Stick to the ground
+                var groundPosition = Physics2D.OverlapCircle(Brawler.GroundCheck.position, groundDistance, GameResources.GameSettings.GroundLayer).transform.position;
+                rb.position = Vector2.Lerp(rb.position, groundPosition, Time.deltaTime * 10);
+            }
+            rb.AddForce(Vector2.down * GameResources.GameSettings.Gravity * rb.mass * rb.gravityScale);
+        }
         public List<(int, float)> Effects { get; set; } = new();
         private float lastCalculatedMult;
         private bool isDirty = true;
