@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using GGJ2025.UIComponents;
 using Karma;
+using Karma.Extensions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,6 +28,21 @@ namespace GGJ2025
             EnableJoining();
         }
 
+        private void Start()
+        {
+            AudioManager.Instance.PlayMusic();
+            CameraDestination = MainCamera.transform.position;
+        }
+
+        private Vector3 CameraDestination;
+        private void Update()
+        {
+            if (MainCamera.transform.position != CameraDestination)
+            {
+                MainCamera.transform.position = Vector3.Lerp(MainCamera.transform.position, CameraDestination, Time.unscaledDeltaTime);
+            }
+        }
+
         private void OnPlayerLeft(PlayerInput obj)
         {
             players.Remove(obj.GetComponent<PlayerInputHandler>());
@@ -34,7 +50,9 @@ namespace GGJ2025
 
         private void OnPlayerJoined(PlayerInput obj)
         {
-            players.Add(obj.GetComponent<PlayerInputHandler>());
+            var inputHandler = obj.GetComponent<PlayerInputHandler>();
+            inputHandler.PlayerIndex = players.Count;
+            players.Add(inputHandler);
             OnPlayerJoinedEvent?.Invoke(obj.GetComponent<PlayerInputHandler>());
         } 
         public void ResetPlayers()
@@ -60,6 +78,11 @@ namespace GGJ2025
         {
             brawlManager = BrawlManager.StartBrawl(players, playerSelections, selectedMap, selectedMode);
             DisableJoining();
+        }
+        
+        public void MoveCameraTo(Brawler brawler)
+        {
+            CameraDestination = brawler.transform.position.With(z: -5f);
         }
     }
 }

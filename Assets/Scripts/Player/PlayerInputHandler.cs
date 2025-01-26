@@ -8,6 +8,7 @@ public class PlayerInputHandler : BrawlerInputHandler
     private PlayerInput playerInput;
     private InputAction MoveAction;
     public Vector2 MoveInput { get; private set; }
+    public int PlayerIndex;
     private void OnValidate() => ValidateRefs();
     private void ValidateRefs()
     {

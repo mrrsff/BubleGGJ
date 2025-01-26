@@ -316,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3241efc5b03d4e01a13ac62d1abb11dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectRandomOnStart: 0
   SelectedObject: {fileID: 0}
   Dropdown: {fileID: 1939113357619207005}
 --- !u!1 &757898350157603763
@@ -3446,6 +3447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf3e50441534e24a096df013db0d145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectRandomOnStart: 1
   SelectedObject: {fileID: 0}
   Dropdown: {fileID: 6647201340870188610}
 --- !u!1 &9013750435583757484

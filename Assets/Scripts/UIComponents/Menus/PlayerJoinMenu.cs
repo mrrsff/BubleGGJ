@@ -20,6 +20,8 @@ namespace GGJ2025.UIComponents.Menus
 
         private void OnEnable()
         {
+            _playerCount = 0;
+            _playerDescriptions.ForEach(playerDescription => playerDescription.gameObject.SetActive(false));
             GameManager.Instance.OnPlayerJoinedEvent += OnPlayerJoin;
             var players = GameManager.Instance.GetPlayers();
             foreach (var player in players)
@@ -36,7 +38,9 @@ namespace GGJ2025.UIComponents.Menus
         private void OnPlayerJoin(PlayerInputHandler playerInputHandler)
         {
             if (_playerCount >= _playerDescriptions.Count) return;
-            _playerDescriptions[_playerCount].SetPlayerDescription(playerInputHandler);
+            var description = _playerDescriptions[_playerCount];
+            description.gameObject.SetActive(true);
+            description.SetPlayerDescription(playerInputHandler);
             _playerCount++;
         }
         

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
+using GGJ2025.UIComponents;
 using Karma;
 using Karma.Extensions;
 using UnityEngine;
@@ -24,11 +26,16 @@ namespace GGJ2025
                 brawlManager.players.Add(player);
             }
             mode.OnBrawlStart(brawlManager);
+            UIManager.Instance.SetBrawlers(brawlManager.players.ToArray());
             return brawlManager;
         }
         public void EndBrawl(Brawler winner)
         {
-            Debug.Log($"{winner.name} won the brawl!");
+            winner.transform.SetParent(null);
+            winner.BodyCollider.gameObject.transform.LookAt(-GameManager.MainCamera.transform.forward);
+            UIManager.Instance.ShowWinMenu(winner);
+            AudioManager.Instance.PlayWinMusic();
+            GameManager.Instance.MoveCameraTo(winner);
             Destroy(gameObject);
         }
         

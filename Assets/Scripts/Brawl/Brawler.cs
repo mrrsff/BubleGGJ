@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using GGJ2025.AttackSystem;
+using GGJ2025.Indicator;
 using Karma.Physics;
+using TMPro;
 using UnityEngine;
 
 namespace GGJ2025
 {
     public class Brawler : MonoBehaviour, IHittable
     {
-        [field: SerializeField] public MeleeAttack MeleeAttack { get; private set; }
-        [field: SerializeField] public ProjectileAttack ProjectileAttack { get; private set; }
+        [field: SerializeField] public MeleeAttack MeleeAttackSO { get; private set; }
+        public MeleeAttack MeleeAttack { get; private set; }
+        [field: SerializeField] public ProjectileAttack ProjectileAttackSO { get; private set; }
+        public ProjectileAttack ProjectileAttack { get; private set; }
 
         #region BrawlerComponents
 
@@ -56,6 +60,9 @@ namespace GGJ2025
 
         private void Awake()
         {
+            MeleeAttack = Instantiate(MeleeAttackSO);
+            ProjectileAttack = Instantiate(ProjectileAttackSO);
+            
             IgnoredObjects.Add(gameObject);
             IgnoredObjects.Add(BodyCollider.gameObject);
         }
@@ -63,6 +70,8 @@ namespace GGJ2025
         public void SetInputHandler(BrawlerInputHandler brawlerInputHandler)
         {
             InputHandler = brawlerInputHandler;
+            // last char of name is the player number
+            GetComponent<BrawlerIndicator>().playerid = gameObject.name[^1];
         }
         public void OnHit(HitInfo hitInfo)
         { 
@@ -70,6 +79,11 @@ namespace GGJ2025
             {
                 brawlerComponent.OnHit(hitInfo);
             }
+        }
+        
+        public void Shake(float magnitude)
+        {
+            transform.position += (Vector3)UnityEngine.Random.insideUnitCircle * (magnitude * Time.deltaTime);
         }
         
     }

@@ -1,5 +1,7 @@
 ﻿using GGJ2025.UIComponents.Menus;
 using Karma;
+using Karma.Extensions;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +13,10 @@ namespace GGJ2025.UIComponents
         public Image fadeImage;
         public GameObject mainMenu;
         public PlayerJoinMenu playerJoinMenu;
+        public GameObject winMenu;
+        public TextMeshProUGUI winText;
+        
+        private BrawlerHUD[] brawlerHUDs;
         
         private float initialAlpha;
         private float fadeDuration = .5f;
@@ -18,16 +24,17 @@ namespace GGJ2025.UIComponents
         {
             base.Awake();
             initialAlpha = fadeImage.color.a;
+            brawlerHUDs = GetComponentsInChildren<BrawlerHUD>(true);
         }
 
         public void FadeIn()
         {
-            fadeImage.CrossFadeAlpha(0, fadeDuration, false);
+            fadeImage.CrossFadeAlpha(0, fadeDuration, true);
         }
         
         public void FadeOut()
         {
-            fadeImage.CrossFadeAlpha(initialAlpha, fadeDuration, false);
+            fadeImage.CrossFadeAlpha(initialAlpha, fadeDuration, true);
         }
         
         public void MainMenuStartButton()
@@ -57,6 +64,30 @@ namespace GGJ2025.UIComponents
             var playerSelections = playerJoinMenu.GetPlayerSelections();
             GameManager.Instance.StartBrawl(playerSelections, playerJoinMenu.MapSelector.SelectedObject, playerJoinMenu.ModeSelector.SelectedObject);
             FadeIn();
+        }
+
+        public void SetBrawlers(Brawler[] brawlers)
+        {
+            for (int i = 0; i < brawlerHUDs.Length; i++)
+            {
+                if (i >= brawlers.Length)
+                {
+                    brawlerHUDs[i].gameObject.SetActive(false);
+                }
+                else
+                {
+                    brawlerHUDs[i].gameObject.SetActive(true);
+                    brawlerHUDs[i].SetBrawler(brawlers[i]);
+                }
+            }
+        }
+
+        public void ShowWinMenu(Brawler winner)
+        {
+            FadeOut();
+            Time.timeScale = 0;
+            winText.text = winner.name.Bold() + "WON!";
+            winMenu.SetActive(true);
         }
     }
 }

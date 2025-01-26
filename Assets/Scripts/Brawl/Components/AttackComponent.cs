@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using GGJ2025.AttackSystem;
 using GGJ2025.Interfaces;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GGJ2025
 {
@@ -30,9 +32,16 @@ namespace GGJ2025
         }
         private void Update()
         {
-            if(Brawler.MeleeAttack.IsCharging) Brawler.MeleeAttack.UpdateCharge();
-            
-            if (Brawler.ProjectileAttack.IsCharging) Brawler.ProjectileAttack.UpdateCharge();
+            if(Brawler.MeleeAttack.IsCharging)
+            {
+                Brawler.MeleeAttack.UpdateCharge();
+                Brawler.Shake(Brawler.MeleeAttack.ChargeAmount);
+            }
+            if (Brawler.ProjectileAttack.IsCharging)
+            {
+                Brawler.ProjectileAttack.UpdateCharge();
+                Brawler.Shake(Brawler.ProjectileAttack.ChargeAmount);
+            }
         }
 
         private void NormalAttack(bool value)
