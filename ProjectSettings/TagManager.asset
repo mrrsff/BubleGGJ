@@ -13,7 +13,11 @@ TagManager:
   - UI
   - Hittable
   - Pickup
+<<<<<<< Updated upstream
   - Player
+=======
+  - outline
+>>>>>>> Stashed changes
   - 
   - 
   - 
