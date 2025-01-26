@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 3853486212022085421}
   - component: {fileID: 1508485448669839655}
   m_Layer: 0
-  m_Name: BasicBrawlMap
+  m_Name: OldBasicBrawlMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
