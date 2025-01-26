@@ -10,9 +10,9 @@ namespace GGJ2025
     {
         [SerializeField] private float currentStamina;
         private float maxStamina = 100;
-        private float staminaRegenRate = 25f;
+        private float staminaRegenRate = 35f;
         private Cooldown staminaRegenCooldown = new Cooldown(0.1f);
-        private Cooldown staminaRegenDelay = new Cooldown(1f);
+        private Cooldown staminaRegenDelay = new Cooldown(.5f);
         private float jumpStaminaCost = 5;
         private MovementComponent movementComponent;
         
