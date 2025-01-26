@@ -15,6 +15,7 @@ namespace GGJ2025
         [field: SerializeField] public ProjectileAttack ProjectileAttackSO { get; private set; }
         public ProjectileAttack ProjectileAttack { get; private set; }
 
+        public Animator animator;
         #region BrawlerComponents
 
         private readonly List<BaseBrawlerComponent> _brawlerComponents = new List<BaseBrawlerComponent>();

@@ -5,7 +5,7 @@ namespace GGJ2025
 {
     public class RespawnComponent : BaseBrawlerComponent
     {
-        public float MaxDistance = 15f;
+        public float MaxDistance = 8f;
 
         private Vector3 startPos;
         public override void SetBrawler(Brawler brawler)
@@ -17,7 +17,8 @@ namespace GGJ2025
         private void Update()
         {
             if (Brawler == null) return;
-            if (Vector3.Distance(Brawler.transform.position, startPos) > MaxDistance)
+            var distance = Vector2.Distance(Brawler.transform.position, startPos);
+            if (distance > MaxDistance)
             {
                 Brawler.transform.position = startPos;
                 Brawler.Get<HealthComponent>().OnHit(new HitInfo(){Damage = 1});;
