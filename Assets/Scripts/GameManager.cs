@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GGJ2025.UIComponents;
 using Karma;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,12 +8,16 @@ namespace GGJ2025
 {
     public class GameManager : PersistentSingleton<GameManager>
     {
+        public static Camera MainCamera;
         private PlayerInputManager playerInputManager;
         private List<PlayerInputHandler> players = new ();
+        [field: SerializeField] public UIManager UIManager { get; private set; }
 
         private BrawlManager brawlManager;
         private void Awake()
         {
+            MainCamera = Camera.main;
+            UIManager = FindFirstObjectByType<UIManager>();
             playerInputManager = GetComponent<PlayerInputManager>();
             playerInputManager.onPlayerJoined += OnPlayerJoined;
             playerInputManager.onPlayerLeft += OnPlayerLeft;

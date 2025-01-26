@@ -9,7 +9,6 @@ namespace GGJ2025
         {
             Brawler = brawler;
         }
-
         public virtual void OnHit(HitInfo hitInfo) { }
     }
 }

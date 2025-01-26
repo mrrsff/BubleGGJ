@@ -5,8 +5,8 @@ namespace GGJ2025
 {
     public class HealthComponent : BaseBrawlerComponent
     {
-        [field: SerializeField] public int Health { get; private set; }
-        [field: SerializeField] public int MaxHealth { get; private set; }
+        [field: SerializeField] public int Health { get; private set; } = 5;
+        [field: SerializeField] public int MaxHealth { get; private set; } = 5;
 
         private bool isDead;
         public event Action OnDeath;

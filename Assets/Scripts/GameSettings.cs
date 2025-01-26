@@ -8,5 +8,6 @@ namespace GGJ2025
         public LayerMask GroundLayer;
         public LayerMask HittableLayer;
         public LayerMask PickupLayer;
+        public string ProjectilePoolKey = "ProjectilePool";
     }
 }

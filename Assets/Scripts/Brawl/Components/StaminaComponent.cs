@@ -1,10 +1,72 @@
-﻿namespace GGJ2025
+﻿using System;
+using System.Collections.Generic;
+using GGJ2025.Interfaces;
+using Karma;
+using UnityEngine;
+
+namespace GGJ2025
 {
-    public class StaminaComponent : BaseBrawlerComponent
+    public class StaminaComponent : BaseBrawlerComponent, IComponentEffector<MovementComponent, float>
     {
-        public override void OnHit(HitInfo hitInfo)
+        [SerializeField] private float currentStamina;
+        private float maxStamina = 100;
+        private float staminaRegenRate = 25;
+        private Cooldown staminaRegenCooldown = new Cooldown(0.1f);
+        private Cooldown staminaRegenDelay = new Cooldown(1f);
+
+        public override void SetBrawler(Brawler brawler)
         {
-            
+            base.SetBrawler(brawler);
+        }
+
+        private void Update()
+        {
+            if (staminaRegenCooldown.IsReady && staminaRegenDelay.IsReady)
+            {
+                RegenStamina();
+            }
+        }
+        public bool CanUseStamina(float amount)
+        {
+            return currentStamina >= amount;
+        }
+        public void UseStamina(float amount)
+        {
+            currentStamina = Mathf.Clamp(currentStamina - amount, 0, maxStamina);
+            staminaRegenCooldown.Reset();
+            staminaRegenDelay.Reset();
+        }
+        
+        private void RegenStamina()
+        {
+            var newStamina = currentStamina + ((staminaRegenRate - 5 * DetermineStaminaState()) * Time.deltaTime);
+            currentStamina = Mathf.Clamp(newStamina, 0, maxStamina);
+            staminaRegenCooldown.Reset();
+        }
+        
+        private int DetermineStaminaState()
+        {
+            // 20-40-40 => 15-20-25
+            var percentage = currentStamina / maxStamina;
+            return percentage switch
+            {
+                < 0.2f => 1,
+                < 0.4f => 2,
+                _ => 3
+            };
+        }
+        
+        public List<int> effectIds { get; set; } = new();
+        public int ApplyEffect(float effect)
+        {
+            int id = Brawler.Get<MovementComponent>().AddEffect(effect);
+            effectIds.Add(id);
+            return id;
+        }
+
+        public void RemoveEffect(int Id)
+        {
+            Brawler.Get<MovementComponent>().RemoveEffect(Id);
         }
     }
 }

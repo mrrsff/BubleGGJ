@@ -11,7 +11,9 @@ namespace GGJ2025
         {
             typeof(HealthComponent),
             typeof(AttackComponent),
-            typeof(CollectorComponent)
+            typeof(CollectorComponent),
+            typeof(ForceReceiverComponent),
+            typeof(MovementComponent)
         };
 
         public override void OnBrawlStart(BrawlManager brawlManager)

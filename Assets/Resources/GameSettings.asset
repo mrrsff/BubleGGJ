@@ -15,9 +15,9 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 1
-  PlayerLayer:
+  HittableLayer:
     serializedVersion: 2
-    m_Bits: 0
-  PlayerProjectileLayer:
+    m_Bits: 256
+  PickupLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128

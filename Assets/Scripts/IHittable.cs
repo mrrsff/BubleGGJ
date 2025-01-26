@@ -4,15 +4,10 @@ namespace GGJ2025
 {
     public class HitInfo
     {
-        public int Damage { get; }
-        public Vector3 Direction { get; }
-        public GameObject Source { get; }
-        public HitInfo(int damage, Vector3 direction, GameObject source)
-        {
-            Damage = damage;
-            Direction = direction;
-            Source = source;
-        }
+        public int Damage;
+        public Vector3 Direction;
+        public float Force;
+        public GameObject Source;
     }
     
     public interface IHittable

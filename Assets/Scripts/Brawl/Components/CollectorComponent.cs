@@ -11,7 +11,7 @@ namespace GGJ2025
         public override void SetBrawler(Brawler brawler)
         {
             base.SetBrawler(brawler);
-            CollisionReporter = Brawler.pickupCollider.gameObject.AddComponent<Collision2DReporter>();
+            CollisionReporter = Brawler.PickupCollider.gameObject.AddComponent<Collision2DReporter>();
             CollisionReporter.OnTriggerEnterEvent += OnTriggerEntered;
             
         }

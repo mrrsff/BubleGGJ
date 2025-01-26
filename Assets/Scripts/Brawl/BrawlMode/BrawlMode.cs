@@ -10,12 +10,12 @@ namespace GGJ2025
         protected virtual List<Type> necessaryComponents { get; } = new List<Type>();
         protected List<Brawler> brawlers;
 
-        protected void SetupBrawler(Brawler brawler)
+        private void SetupBrawler(Brawler brawler)
         {
             foreach (var component in necessaryComponents)
             {
                 var newComponent = brawler.gameObject.AddComponent(component) as BaseBrawlerComponent;
-                brawler.SetBrawlerComponent(newComponent);
+                brawler.RegisterBrawlerComponent(newComponent);
             }
         }
 

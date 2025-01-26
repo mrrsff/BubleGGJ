@@ -1,27 +1,77 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using GGJ2025.AttackSystem;
+using GGJ2025.Interfaces;
+using UnityEngine;
 
 namespace GGJ2025
 {
-    public class AttackComponent : BaseBrawlerComponent
+    public class AttackComponent : BaseBrawlerComponent, IComponentEffector<MovementComponent, float>
     {
-        public override void OnHit(HitInfo hitInfo) { }
-
         public override void SetBrawler(Brawler brawler)
         {
             base.SetBrawler(brawler);
-            brawler.OnNormalAttackEvent += NormalAttack;
-            brawler.OnSpecialAttackEvent += SpecialAttack;
-            brawler.OnParryEvent += Parry;
+            brawler.InputHandler.OnNormalAttackEvent += NormalAttack;
+            brawler.InputHandler.OnBalloonAttackEvent += SpecialAttack;
+            brawler.InputHandler.OnParryEvent += Parry;
+            
+            brawler.MeleeAttack.OnChargeStart += OnChargeStart;
+            brawler.ProjectileAttack.OnChargeStart += OnChargeStart;
+            brawler.MeleeAttack.OnChargeEnd += OnChargeEnd;
+            brawler.ProjectileAttack.OnChargeEnd += OnChargeEnd;
         }
-        
+        private void OnChargeStart()
+        {
+            ApplyEffect(0.1f);
+        }
+        private void OnChargeEnd()
+        {
+            RemoveEffect(effectIds[0]);
+        }
+        private void Update()
+        {
+            if(Brawler.MeleeAttack.IsCharging) Brawler.MeleeAttack.UpdateCharge();
+            
+            if (Brawler.ProjectileAttack.IsCharging) Brawler.ProjectileAttack.UpdateCharge();
+        }
+
         private void NormalAttack(bool value)
         {
+            if (value)
+            {
+                Brawler.MeleeAttack.StartCharge(Brawler, Brawler.IgnoredObjects);
+            }
+            else if (Brawler.MeleeAttack.IsCharging)
+            {
+                Brawler.MeleeAttack.EndCharge();
+            }
         }
         private void SpecialAttack(bool value)
         {
+            if (value)
+            {
+                Brawler.ProjectileAttack.StartCharge(Brawler, Brawler.IgnoredObjects);
+            }
+            else if (Brawler.ProjectileAttack.IsCharging)
+            {
+                Brawler.ProjectileAttack.EndCharge();
+            }
         }
         private void Parry()
         {
+        }
+        public List<int> effectIds { get; set; } = new List<int>();
+        public int ApplyEffect(float effect)
+        {
+            int id = Brawler.Get<MovementComponent>().AddEffect(effect);
+            effectIds.Add(id);
+            return id;
+        }
+
+        public void RemoveEffect(int Id)
+        {
+            Brawler.Get<MovementComponent>().RemoveEffect(Id);
+            effectIds.Remove(Id);
         }
     }
 }

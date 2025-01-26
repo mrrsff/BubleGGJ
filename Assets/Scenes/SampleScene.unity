@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoUnparentOnAwake: 1
+  <UIManager>k__BackingField: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -767,6 +768,7 @@ GameObject:
   - component: {fileID: 1365264101}
   - component: {fileID: 1365264100}
   - component: {fileID: 1365264099}
+  - component: {fileID: 1365264103}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -823,7 +825,7 @@ Canvas:
   m_GameObject: {fileID: 1365264098}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 330585545}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -857,6 +859,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1365264103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365264098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a72b15f235f402184d1daee8a9701b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Canvas>k__BackingField: {fileID: 1365264101}
 --- !u!1 &1497608378
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,7 +908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 120, y: -60}
+  m_AnchoredPosition: {x: 119.99994, y: -60}
   m_SizeDelta: {x: 180, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1497608380

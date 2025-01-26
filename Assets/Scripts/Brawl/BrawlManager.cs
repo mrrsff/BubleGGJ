@@ -17,7 +17,8 @@ namespace GGJ2025
             spawnPoints.Shuffle();
             for (var i = 0; i < playerInputHandlers.Count; i++)
             {
-                var player = Instantiate(GameResources.PlayerManager, spawnPoints[i].position, Quaternion.identity, brawlManager.map.transform);
+                var player = Instantiate(GameResources.Brawler, spawnPoints[i].position, Quaternion.identity, brawlManager.map.transform);
+                player.gameObject.name = $"Player {i + 1}";
                 player.SetInputHandler(playerInputHandlers[i]);
                 brawlManager.players.Add(player);
             }
