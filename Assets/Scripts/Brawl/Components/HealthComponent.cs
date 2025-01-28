@@ -13,8 +13,8 @@ namespace GGJ2025
         public event Action<int> OnHealthChanged;
         public override void OnHit(HitInfo hitInfo)
         {
-            if (isDead) return;
-            
+            if (isDead && hitInfo.Damage == 0) return;
+            Brawler.audioSource.PlayOneShot(Brawler.hitSound);
             ChangeHealth(-hitInfo.Damage);
             if (Health <= 0)
             {

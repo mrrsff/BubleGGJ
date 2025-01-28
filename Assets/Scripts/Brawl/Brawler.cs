@@ -14,8 +14,6 @@ namespace GGJ2025
         public MeleeAttack MeleeAttack { get; private set; }
         [field: SerializeField] public ProjectileAttack ProjectileAttackSO { get; private set; }
         public ProjectileAttack ProjectileAttack { get; private set; }
-
-        public Animator animator;
         #region BrawlerComponents
 
         private readonly List<BaseBrawlerComponent> _brawlerComponents = new List<BaseBrawlerComponent>();
@@ -49,6 +47,12 @@ namespace GGJ2025
 
         #endregion
 
+        public AudioSource audioSource;
+        public AudioSource audioSource2;
+        public AudioClip chargeSound;
+        public AudioClip bubbleSound;
+        public AudioClip hitSound;
+        public AudioClip jumpSound;
         [field: SerializeField] public List<GameObject> IgnoredObjects { get; private set; } = new ();
         [field: SerializeField] public BrawlerInputHandler InputHandler { get; private set; }
         [field: SerializeField] public Transform AttackPoint { get; private set; }

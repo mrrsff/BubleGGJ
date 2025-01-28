@@ -21,6 +21,8 @@ namespace GGJ2025
             brawler.ProjectileAttack.OnChargeStart += OnChargeStart;
             brawler.MeleeAttack.OnChargeEnd += OnChargeEnd;
             brawler.ProjectileAttack.OnChargeEnd += OnChargeEnd;
+            
+            brawler.audioSource.clip = brawler.chargeSound;
         }
         private void OnChargeStart()
         {
@@ -36,11 +38,13 @@ namespace GGJ2025
             {
                 Brawler.MeleeAttack.UpdateCharge();
                 Brawler.Shake(Brawler.MeleeAttack.ChargeAmount);
+                Brawler.audioSource.Play();
             }
             if (Brawler.ProjectileAttack.IsCharging)
             {
                 Brawler.ProjectileAttack.UpdateCharge();
                 Brawler.Shake(Brawler.ProjectileAttack.ChargeAmount);
+                Brawler.audioSource.Stop();
             }
         }
 
@@ -49,10 +53,12 @@ namespace GGJ2025
             if (value)
             {
                 Brawler.MeleeAttack.StartCharge(Brawler, Brawler.IgnoredObjects);
+                Brawler.audioSource.Play();
             }
             else if (Brawler.MeleeAttack.IsCharging)
             {
                 Brawler.MeleeAttack.EndCharge();
+                Brawler.audioSource.Stop();
             }
         }
         private void SpecialAttack(bool value)

@@ -74,6 +74,8 @@ namespace GGJ2025
             jumpCooldown.Reset();
             
             OnJumpEvent?.Invoke();
+            Brawler.audioSource2.clip = Brawler.jumpSound;
+            Brawler.audioSource2.Play();
         }
 
         private void CheckGrounded()
