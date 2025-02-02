@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 1313707939920442200}
   - component: {fileID: 250571322693805640}
   m_Layer: 8
-  m_Name: Brawler
+  m_Name: Flopper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
